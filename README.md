@@ -1,4 +1,4 @@
-# [Név]
+# [Ibrányi Levente Alex]
 
 ## Hogyan kezdj neki?
 
