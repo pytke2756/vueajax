@@ -64,7 +64,7 @@
           <td>{{ statue.height }}</td>
           <td>{{ statue.price }}</td>
           <td>
-            <button @click="deletePainting(statue.id)">Törlés</button>
+            <button @click="deleteStatue(statue.id)">Törlés</button>
             <button @click="editPainting(statue.id)">Szerkesztés</button>
           </td>
         </tr>
@@ -138,6 +138,17 @@ export default {
       console.log(Response)
       await this.loadData()
     },
+
+
+    async deleteStatue(id){
+        let Response = await fetch(`http://127.0.0.1:8000/api/statues/${id}`, {
+        method: 'DELETE'
+      })
+      console.log(Response)
+      await this.loadStatues()
+    },
+
+
     async newPainting() {
       this.saving='disabled'
      await fetch('http://127.0.0.1:8000/api/paintings', {
@@ -164,7 +175,7 @@ export default {
        },
        body: JSON.stringify(this.statue) 
      })
-     await this.loadData()
+     await this.loadStatues()
      this.statueSaving=false
      this.resetForm()
     },
