@@ -82,9 +82,9 @@
             <input type="number" v-model="statue.price">
           </td>
           <td>
-            <button v-if="mod_new" @click="newPainting" :disabled="saving">Létrehoz</button>
-            <button v-if="!mod_new" @click="savePainting" :disabled="saving">Mentés</button>
-            <button v-if="!mod_new" @click="cancelEdit" :disabled="saving">Mégse</button>
+            <button v-if="mod_new" @click="newStatue" :disabled="statueSaving">Létrehoz</button>
+            <button v-if="!mod_new" @click="savePainting" :disabled="statueSaving">Mentés</button>
+            <button v-if="!mod_new" @click="cancelEdit" :disabled="statueSaving">Mégse</button>
           </td>
         </tr>
       </tbody>
@@ -109,6 +109,7 @@ export default {
         year: '',
         on_display: false
       },
+      statueSaving: false,
       statue: {
         id: null,
         person: '',
@@ -151,6 +152,24 @@ export default {
      this.saving=false
      this.resetForm()
     },
+
+
+    async newStatue(){
+      this.statueSaving='disabled'
+     await fetch('http://127.0.0.1:8000/api/statues', {
+       method: 'POST',
+       headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       },
+       body: JSON.stringify(this.statue) 
+     })
+     await this.loadData()
+     this.statueSaving=false
+     this.resetForm()
+    },
+
+
     async savePainting() {
       this.saving='disabled'
      await fetch(`http://127.0.0.1:8000/api/paintings/${this.painting.id}`, {
