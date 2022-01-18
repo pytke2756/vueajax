@@ -65,7 +65,7 @@
           <td>{{ statue.price }}</td>
           <td>
             <button @click="deleteStatue(statue.id)">Törlés</button>
-            <button @click="editPainting(statue.id)">Szerkesztés</button>
+            <button @click="editStatue(statue.id)">Szerkesztés</button>
           </td>
         </tr>
         <tr>
@@ -82,9 +82,9 @@
             <input type="number" v-model="statue.price">
           </td>
           <td>
-            <button v-if="mod_new" @click="newStatue" :disabled="statueSaving">Létrehoz</button>
-            <button v-if="!mod_new" @click="savePainting" :disabled="statueSaving">Mentés</button>
-            <button v-if="!mod_new" @click="cancelEdit" :disabled="statueSaving">Mégse</button>
+            <button v-if="mod_new_statue" @click="newStatue" :disabled="statueSaving">Létrehoz</button>
+            <button v-if="!mod_new_statue" @click="saveStatue" :disabled="statueSaving">Mentés</button>
+            <button v-if="!mod_new_statue" @click="cancelEdit" :disabled="statueSaving">Mégse</button>
           </td>
         </tr>
       </tbody>
@@ -109,6 +109,7 @@ export default {
         year: '',
         on_display: false
       },
+      mod_new_statue: true,
       statueSaving: false,
       statue: {
         id: null,
@@ -161,7 +162,7 @@ export default {
      })
      await this.loadData()
      this.saving=false
-     this.resetForm()
+     this.resetStatueForm()
     },
 
 
@@ -177,7 +178,7 @@ export default {
      })
      await this.loadStatues()
      this.statueSaving=false
-     this.resetForm()
+     this.resetStatueForm()
     },
 
 
@@ -195,12 +196,37 @@ export default {
      this.saving=false
      this.resetForm()
     },
+
+    async saveStatue(){
+        this.statueSaving='disabled'
+        await fetch(`http://127.0.0.1:8000/api/statues/${this.statue.id}`, {
+       method: 'PATCH',
+       headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       },
+       body: JSON.stringify(this.statue) 
+     })
+     await this.loadStatues()
+     this.statueSaving=false
+     this.resetStatueForm()
+    },
+
+
     async editPainting(id) {
       let Response = await fetch(`http://127.0.0.1:8000/api/paintings/${id}`)
       let data = await Response.json()
       this.painting = {...data};
       this.mod_new = false
     },
+
+    async editStatue(id){
+      let Response = await fetch(`http://127.0.0.1:8000/api/statues/${id}`)
+      let data = await Response.json()
+      this.statue = {...data};
+      this.mod_new_statue = false
+    },
+
     cancelEdit () {
       this.resetForm()
     },
@@ -212,10 +238,21 @@ export default {
         on_display: false
       }
       this.mod_new = true
-    }
+    },
+    resetStatueForm() {
+      this.statue = {
+        id: null,
+        person: '',
+        height: '',
+        price: ''
+      }
+      this.mod_new_statue = true
+    },
+
   },
   mounted() {
-    this.loadData()
+    this.loadData(),
+    this.loadStatues()
   }
 }
 </script>
