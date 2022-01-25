@@ -13,7 +13,7 @@
       <tbody>
         <tr v-for="statue in statues" v-bind:key="statue.id">
           <td>{{ statue.id }}</td>
-          <td>{{ statue.person }}</td>
+          <td><router-link :to="'/statues/'+statue.id">{{ statue.person }}</router-link></td>
           <td>{{ statue.height }}</td>
           <td>{{ statue.price }}</td>
           <td>

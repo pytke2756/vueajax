@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <router-link to="/">Paintings</router-link>
-    <router-link to="/statues">Statues</router-link>
-    <router-link to="/info">Info</router-link>
+    <nav>
+      <router-link to="/">Paintings</router-link>
+      <router-link to="/statues">Statues</router-link>
+      <router-link to="/info">Info</router-link>
+    </nav>
     <router-view></router-view>
   </div>
 </template>
@@ -21,3 +23,9 @@ export default {
     },
 }
 </script>
+
+<style>
+  nav router-link{
+    background-color:green ;
+  }
+</style>
